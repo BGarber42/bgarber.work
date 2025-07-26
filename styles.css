@@ -689,6 +689,40 @@ body {
     border: 1px solid #333;
 }
 
+.project-links {
+    display: flex;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #333;
+}
+
+.project-link {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: #27c93f;
+    text-decoration: none;
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 6px 12px;
+    border: 1px solid #333;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    background: #2a2a2a;
+}
+
+.project-link:hover {
+    border-color: #27c93f;
+    background: #27c93f;
+    color: #0a0a0a;
+    transform: translateY(-1px);
+}
+
+.project-link i {
+    font-size: 10px;
+}
+
 /* Contact Section */
 .contact {
     padding: 40px;
