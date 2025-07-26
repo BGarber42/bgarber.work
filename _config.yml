@@ -1,0 +1,16 @@
+# Minimal Jekyll configuration for GitHub Pages
+# This ensures the site builds properly even if Jekyll processes it
+
+# Disable Jekyll processing for static files
+include: []
+exclude: []
+
+# Set the theme to none to avoid Jekyll theme processing
+theme: null
+
+# Disable Jekyll plugins
+plugins: []
+
+# Set the base URL (will be overridden by GitHub Pages)
+baseurl: ""
+url: "" 
