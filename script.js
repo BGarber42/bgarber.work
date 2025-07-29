@@ -382,8 +382,9 @@ function initializeCarousel() {
 
     // Update carousel position
     function updateCarousel() {
-        const slideWidth = 100;
-        track.style.transform = `translateX(-${currentSlide * slideWidth}%)`;
+        const containerWidth = carousel.querySelector('.carousel-container').offsetWidth;
+        const slideWidth = containerWidth;
+        track.style.transform = `translateX(-${currentSlide * slideWidth}px)`;
     }
 
     // Update indicator states
@@ -499,6 +500,11 @@ function initializeCarousel() {
     // Pause auto-play on hover
     carousel.addEventListener('mouseenter', stopAutoPlay);
     carousel.addEventListener('mouseleave', startAutoPlay);
+
+    // Handle window resize
+    window.addEventListener('resize', () => {
+        updateCarousel();
+    });
 
     // Initialize
     initCarousel();
