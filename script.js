@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeServiceNodes();
     initializeFormHandling();
     initializeAnimations();
+    initializeCarousel();
 });
 
 // Navigation functionality
@@ -356,4 +357,150 @@ function typeWriter(element, text, speed) {
             clearInterval(timer);
         }
     }, speed);
+}
+
+// Carousel functionality
+function initializeCarousel() {
+    const carousel = document.querySelector('.projects-carousel');
+    if (!carousel) return;
+
+    const track = carousel.querySelector('.carousel-track');
+    const slides = carousel.querySelectorAll('.project-card');
+    const prevBtn = carousel.querySelector('.prev-btn');
+    const nextBtn = carousel.querySelector('.next-btn');
+    const indicators = carousel.querySelectorAll('.indicator');
+
+    let currentSlide = 0;
+    const totalSlides = slides.length;
+
+    // Initialize carousel
+    function initCarousel() {
+        updateCarousel();
+        updateIndicators();
+        updateButtons();
+    }
+
+    // Update carousel position
+    function updateCarousel() {
+        const slideWidth = 100;
+        track.style.transform = `translateX(-${currentSlide * slideWidth}%)`;
+    }
+
+    // Update indicator states
+    function updateIndicators() {
+        indicators.forEach((indicator, index) => {
+            indicator.classList.toggle('active', index === currentSlide);
+        });
+    }
+
+    // Update button states
+    function updateButtons() {
+        prevBtn.disabled = currentSlide === 0;
+        nextBtn.disabled = currentSlide === totalSlides - 1;
+    }
+
+    // Go to specific slide
+    function goToSlide(slideIndex) {
+        if (slideIndex >= 0 && slideIndex < totalSlides) {
+            currentSlide = slideIndex;
+            updateCarousel();
+            updateIndicators();
+            updateButtons();
+        }
+    }
+
+    // Next slide
+    function nextSlide() {
+        if (currentSlide < totalSlides - 1) {
+            goToSlide(currentSlide + 1);
+        }
+    }
+
+    // Previous slide
+    function prevSlide() {
+        if (currentSlide > 0) {
+            goToSlide(currentSlide - 1);
+        }
+    }
+
+    // Event listeners
+    if (prevBtn) {
+        prevBtn.addEventListener('click', prevSlide);
+    }
+
+    if (nextBtn) {
+        nextBtn.addEventListener('click', nextSlide);
+    }
+
+    // Indicator clicks
+    indicators.forEach((indicator, index) => {
+        indicator.addEventListener('click', () => goToSlide(index));
+    });
+
+    // Keyboard navigation
+    document.addEventListener('keydown', (e) => {
+        if (carousel.contains(document.activeElement) || 
+            carousel.querySelector(':hover')) {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                prevSlide();
+            } else if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                nextSlide();
+            }
+        }
+    });
+
+    // Touch/swipe support for mobile
+    let startX = 0;
+    let endX = 0;
+
+    track.addEventListener('touchstart', (e) => {
+        startX = e.touches[0].clientX;
+    });
+
+    track.addEventListener('touchend', (e) => {
+        endX = e.changedTouches[0].clientX;
+        handleSwipe();
+    });
+
+    function handleSwipe() {
+        const swipeThreshold = 50;
+        const diff = startX - endX;
+
+        if (Math.abs(diff) > swipeThreshold) {
+            if (diff > 0) {
+                nextSlide();
+            } else {
+                prevSlide();
+            }
+        }
+    }
+
+    // Auto-play functionality (optional)
+    let autoPlayInterval;
+    
+    function startAutoPlay() {
+        autoPlayInterval = setInterval(() => {
+            if (currentSlide < totalSlides - 1) {
+                nextSlide();
+            } else {
+                goToSlide(0);
+            }
+        }, 5000); // Change slide every 5 seconds
+    }
+
+    function stopAutoPlay() {
+        if (autoPlayInterval) {
+            clearInterval(autoPlayInterval);
+        }
+    }
+
+    // Pause auto-play on hover
+    carousel.addEventListener('mouseenter', stopAutoPlay);
+    carousel.addEventListener('mouseleave', startAutoPlay);
+
+    // Initialize
+    initCarousel();
+    startAutoPlay();
 } 
