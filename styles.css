@@ -266,6 +266,18 @@ body {
     color: #0a0a0a;
 }
 
+.btn-outline {
+    background: transparent;
+    color: #e4e4e7;
+    border: 1px solid #374151;
+}
+
+.btn-outline:hover {
+    background: #374151;
+    border-color: #4b5563;
+    transform: translateY(-1px);
+}
+
 .hero-visual {
     display: flex;
     justify-content: center;
