@@ -80,15 +80,18 @@ function populateTraditionalLayout() {
         const type = card.querySelector('.project-type').innerText;
         const description = card.querySelector('.project-content p').innerText;
         const techTags = card.querySelectorAll('.tech-tag');
+        const linksContainer = card.querySelector('.project-links');
         let tagsHtml = '';
         techTags.forEach(tag => {
             tagsHtml += `<li>${tag.innerText}</li>`;
         });
+        const linksHtml = linksContainer ? linksContainer.innerHTML : '';
         projectsHtml += `
             <div class="project">
                 <h3>${title} - ${type}</h3>
                 <p>${description}</p>
-                <ul>${tagsHtml}</ul>
+                <ul class="project-tech-traditional">${tagsHtml}</ul>
+                <div class="project-links-traditional">${linksHtml}</div>
             </div>
         `;
     });
