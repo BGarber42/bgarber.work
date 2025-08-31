@@ -15,7 +15,85 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeFormHandling();
     initializeAnimations();
     initializeCarousel();
+    initializeThemeToggle();
 });
+
+// Theme toggle functionality
+function initializeThemeToggle() {
+    const traditionalBtn = document.getElementById('traditional-view-btn');
+    const terminalBtn = document.getElementById('terminal-view-btn');
+    const traditionalLayout = document.getElementById('traditional-layout');
+    const terminalLayout = document.getElementById('terminal-layout');
+
+    // Set theme based on localStorage or default
+    const savedTheme = localStorage.getItem('theme') || 'terminal';
+    setTheme(savedTheme);
+
+    traditionalBtn.addEventListener('click', () => setTheme('traditional'));
+    terminalBtn.addEventListener('click', () => setTheme('terminal'));
+
+    function setTheme(theme) {
+        if (theme === 'traditional') {
+            traditionalLayout.style.display = 'block';
+            terminalLayout.style.display = 'none';
+            traditionalBtn.classList.add('active');
+            terminalBtn.classList.remove('active');
+            populateTraditionalLayout();
+            document.body.classList.add('traditional-theme-active');
+        } else {
+            traditionalLayout.style.display = 'none';
+            terminalLayout.style.display = 'block';
+            terminalBtn.classList.add('active');
+            traditionalBtn.classList.remove('active');
+            document.body.classList.remove('traditional-theme-active');
+        }
+        localStorage.setItem('theme', theme);
+    }
+}
+
+function populateTraditionalLayout() {
+    // Populate Experience
+    const experienceSection = document.getElementById('traditional-experience');
+    const timelineItems = document.querySelectorAll('.timeline-item');
+    let experienceHtml = '<h2>Work Experience</h2>';
+    timelineItems.forEach(item => {
+        const title = item.querySelector('h3').innerText;
+        const company = item.querySelector('h4').innerText;
+        const date = item.querySelector('.timeline-date').innerText;
+        const description = item.querySelector('.timeline-body ul').innerHTML;
+        experienceHtml += `
+            <div class="job">
+                <h3>${title} at ${company}</h3>
+                <p><em>${date}</em></p>
+                <ul>${description}</ul>
+            </div>
+        `;
+    });
+    experienceSection.innerHTML = experienceHtml;
+
+    // Populate Projects
+    const projectsSection = document.getElementById('traditional-projects');
+    const projectCards = document.querySelectorAll('#terminal-layout .project-card');
+    let projectsHtml = '<h2>Projects</h2>';
+    projectCards.forEach(card => {
+        const title = card.querySelector('h3').innerText;
+        const type = card.querySelector('.project-type').innerText;
+        const description = card.querySelector('.project-content p').innerText;
+        const techTags = card.querySelectorAll('.tech-tag');
+        let tagsHtml = '';
+        techTags.forEach(tag => {
+            tagsHtml += `<li>${tag.innerText}</li>`;
+        });
+        projectsHtml += `
+            <div class="project">
+                <h3>${title} - ${type}</h3>
+                <p>${description}</p>
+                <ul>${tagsHtml}</ul>
+            </div>
+        `;
+    });
+    projectsSection.innerHTML = projectsHtml;
+}
 
 // Navigation functionality
 function initializeNavigation() {
@@ -112,47 +190,54 @@ function initializeServiceNodes() {
 // Form handling
 function initializeFormHandling() {
     const contactForm = document.getElementById('contactForm');
+    const traditionalContactForm = document.getElementById('contactFormTraditional');
     
     if (contactForm) {
-        contactForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Get form data
-            const formData = new FormData(this);
-            const submitButton = this.querySelector('button[type="submit"]');
-            const originalText = submitButton.innerHTML;
-            
-            // Show loading state
-            submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-            submitButton.disabled = true;
-            
-            // Submit form to Formspree
-            fetch(this.action, {
-                method: 'POST',
-                body: formData,
-                headers: {
-                    'Accept': 'application/json'
-                }
-            })
-            .then(response => {
-                if (response.ok) {
-                    showNotification('Message sent successfully!', 'success');
-                    this.reset();
-                } else {
-                    throw new Error('Failed to send message');
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                showNotification('Failed to send message. Please try again.', 'error');
-            })
-            .finally(() => {
-                // Reset button state
-                submitButton.innerHTML = originalText;
-                submitButton.disabled = false;
-            });
-        });
+        contactForm.addEventListener('submit', handleFormSubmit);
     }
+    if (traditionalContactForm) {
+        traditionalContactForm.addEventListener('submit', handleFormSubmit);
+    }
+}
+
+function handleFormSubmit(e) {
+    e.preventDefault();
+    
+    // Get form data
+    const form = this;
+    const formData = new FormData(form);
+    const submitButton = form.querySelector('button[type="submit"]');
+    const originalText = submitButton.innerHTML;
+    
+    // Show loading state
+    submitButton.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+    submitButton.disabled = true;
+    
+    // Submit form to Formspree
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    })
+    .then(response => {
+        if (response.ok) {
+            showNotification('Message sent successfully!', 'success');
+            form.reset();
+        } else {
+            throw new Error('Failed to send message');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        showNotification('Failed to send message. Please try again.', 'error');
+    })
+    .finally(() => {
+        // Reset button state
+        submitButton.innerHTML = originalText;
+        submitButton.disabled = false;
+    });
 }
 
 // Show notification

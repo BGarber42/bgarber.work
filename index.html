@@ -11,6 +11,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <div class="theme-toggle">
+        <button id="traditional-view-btn" class="toggle-btn active" aria-label="Switch to traditional view">Traditional</button>
+        <button id="terminal-view-btn" class="toggle-btn" aria-label="Switch to terminal view">Terminal</button>
+    </div>
+
+    <div id="terminal-layout">
     <!-- Terminal-style header -->
     <header class="terminal-header">
         <div class="terminal-controls">
@@ -610,6 +616,82 @@
             <p>&copy; 2024 Brent Garber. All rights reserved.</p>
         </div>
     </footer>
+    </div>
+
+    <div id="traditional-layout" style="display: none;">
+        <header class="traditional-header">
+            <h1>Brent Garber</h1>
+            <p>Lead DevOps Engineer</p>
+            <nav>
+                <a href="#traditional-about">About</a>
+                <a href="#traditional-experience">Experience</a>
+                <a href="#traditional-projects">Projects</a>
+                <a href="#traditional-contact">Contact</a>
+            </nav>
+        </header>
+        <main class="traditional-main">
+            <section id="traditional-about">
+                <h2>About Me</h2>
+                <p>I'm a seasoned Lead DevOps Engineer with extensive experience in cloud infrastructure and automation. I specialize in AWS services, CI/CD pipelines, and Infrastructure as Code to build secure, scalable platforms.</p>
+                 <p>My background includes leading DevOps initiatives, mentoring teams, and implementing best practices for cloud-native applications with a focus on security, performance, and operational excellence.</p>
+            </section>
+            <section id="traditional-experience">
+                 <h2>Work Experience</h2>
+                 <!-- Experience items will be populated here -->
+            </section>
+            <section id="traditional-projects">
+                <h2>Projects</h2>
+                <!-- Projects will be populated here -->
+            </section>
+            <section id="traditional-contact">
+                <h2>Contact</h2>
+                <div class="traditional-contact-content">
+                    <div class="traditional-contact-info">
+                        <h3>Connect With Me</h3>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <span>me@bgarber.work</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-phone"></i>
+                            <span>202-823-7658</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>New York, United States</span>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fab fa-github"></i>
+                            <a href="https://github.com/bgarber42/" target="_blank" rel="noopener noreferrer">github.com/bgarber42</a>
+                        </div>
+                    </div>
+                    <div class="form-container">
+                        <form id="contactFormTraditional" action="https://formspree.io/f/xovldnbd" method="POST">
+                            <div class="form-group">
+                                <label for="name-traditional">Name:</label>
+                                <input type="text" id="name-traditional" name="name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="email-traditional">Email:</label>
+                                <input type="email" id="email-traditional" name="email" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="subject-traditional">Subject:</label>
+                                <input type="text" id="subject-traditional" name="subject" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="message-traditional">Message:</label>
+                                <textarea id="message-traditional" name="message" rows="5" required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-paper-plane"></i> Send Message
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
 
     <script src="script.js"></script>
 </body>
