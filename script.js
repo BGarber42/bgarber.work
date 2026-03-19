@@ -169,23 +169,10 @@ function initializeScrollEffects() {
 function initializeServiceNodes() {
     serviceNodes.forEach(node => {
         node.addEventListener('click', function() {
-            const service = this.getAttribute('data-service');
-            console.log(`Service clicked: ${service}`);
-            
-            // Add click animation
             this.style.transform = 'scale(0.95)';
             setTimeout(() => {
                 this.style.transform = '';
             }, 150);
-        });
-        
-        // Add hover effects
-        node.addEventListener('mouseenter', function() {
-            this.style.borderColor = '#27c93f';
-        });
-        
-        node.addEventListener('mouseleave', function() {
-            this.style.borderColor = '#333';
         });
     });
 }
@@ -255,21 +242,24 @@ function showNotification(message, type = 'info') {
         </div>
     `;
     
-    // Add styles
     notification.style.cssText = `
         position: fixed;
         top: 60px;
         right: 20px;
-        background: ${type === 'success' ? '#27c93f' : '#ff5f56'};
-        color: #0a0a0a;
+        background: ${type === 'success' ? 'rgba(52, 211, 153, 0.95)' : 'rgba(248, 113, 113, 0.95)'};
+        color: #0F172A;
         padding: 12px 20px;
-        border-radius: 6px;
-        font-family: 'JetBrains Mono', monospace;
+        border-radius: 12px;
+        font-family: 'Inter', system-ui, sans-serif;
         font-size: 14px;
+        font-weight: 500;
         z-index: 10000;
         transform: translateX(100%);
-        transition: transform 0.3s ease;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
     `;
     
     // Add to page
@@ -289,27 +279,32 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
-// Initialize animations
+// Stagger-reveal animation system
 function initializeAnimations() {
-    // Intersection Observer for fade-in animations
-    const observerOptions = {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('fade-in-up');
-            }
-        });
-    }, observerOptions);
-    
-    // Observe elements for animation
-    const animateElements = document.querySelectorAll('.timeline-content, .project-card, .stat-card, .metric-card');
-    animateElements.forEach(el => observer.observe(el));
-    
-    // Animate skill metrics on scroll
+    const targets = document.querySelectorAll(
+        '.timeline-content, .project-card, .stat-card, .metric-card, .code-block, .skills-dashboard, .contact-card, .form-container, .service-node'
+    );
+
+    targets.forEach((el, i) => {
+        el.classList.add('reveal');
+        el.style.setProperty('--i', i % 6);
+    });
+
+    const io = new IntersectionObserver(
+        (entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    io.unobserve(entry.target);
+                }
+            });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
+    );
+
+    targets.forEach((el) => io.observe(el));
+
+    // Animate skill metric bars on scroll
     const skillObserver = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -321,10 +316,11 @@ function initializeAnimations() {
                         fill.style.width = width;
                     }, 200);
                 });
+                skillObserver.unobserve(entry.target);
             }
         });
     }, { threshold: 0.5 });
-    
+
     const skillsDashboard = document.querySelector('.skills-dashboard');
     if (skillsDashboard) {
         skillObserver.observe(skillsDashboard);
@@ -392,11 +388,13 @@ document.addEventListener('DOMContentLoaded', function() {
             top: 50px;
             left: 20px;
             z-index: 1001;
-            background: #1a1a1a;
-            border: 1px solid #333;
-            color: #e4e4e7;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            color: #F1F5F9;
             padding: 8px 12px;
-            border-radius: 4px;
+            border-radius: 6px;
             cursor: pointer;
             display: none;
         `;
